@@ -1,24 +1,22 @@
-const { gql } = require("apollo-server");
+const { gql } = require("apollo-server-express");
 module.exports = {
   typeDefs: gql`
-    type UserS {
-      id: Int!
-      name: String!
-      email: String!
-      menu: [Recipe]!
-    }
-    type Recipe {
-      id: Int!
-      title: String!
-      ingredients: String!
-      direction: String!
-      user: UserS!
+    scalar Date
+    type Message {
+      message: String
     }
 
     type User {
       id: Int!
-      firstname: String!
-      lastname: String
+      firstName: String!
+      lastName: String
+      createdAt: Date
+      updatedAt: Date
+    }
+    input Userinfo {
+      id: Int!
+      firstName: String!
+      lastName: String!
     }
 
     type Teacher {
@@ -44,25 +42,19 @@ module.exports = {
       schedule: String!
       teacher: Teacher!
     }
-    type Query {
-      user_by_id(id: Int!): User
-      all_users: [User!]
-      all_recipe: [Recipe!]
-      recipe_by_id(id: Int!): Recipe
-    }
 
     type Query {
-      user_by_id(id: Int!): User
-      student_by_id(id: Int!): Student
-      all_students: [Student!]
-      student_by_schedule(schedule: String!): Student
-      student_by_educationleve(educationlevel: String!): Student
-      all_teachers: [Teacher!]
-      teacher_by_location(kifleketema: String!): Teacher
-      teacher_by_id(Id: Int!): Teacher
+      fetchallusers: [User!]
+      fetch_students_by_id(id: Int!): Student
+      fetch_all_students: [Student!]
+      fetch_students_by_learning_schedule(schedule: String!): Student
+      fetch_students_by_education_level(educationlevel: String!): Student
+      fetchallteachers: [Teacher!]
+      fetch_teacher_by_kifleketema(kifleketema: String!): Teacher
+      fetch_teacher_by_id(Id: Int!): Teacher
     }
     type Mutation {
-      createUser(firstname: String!, lastname: String): User
+      CreateUser(Userinfo: Userinfo): User
 
       createStudent(
         firstname: String!
@@ -73,7 +65,7 @@ module.exports = {
         educationlevel: String!
         schedule: String!
       ): Student
-      
+
       createTeacher(
         firstname: String!
         lastname: String!
